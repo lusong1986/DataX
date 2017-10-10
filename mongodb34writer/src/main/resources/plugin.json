@@ -1,0 +1,6 @@
+{
+    "name": "mongodb34writer",
+    "class": "com.alibaba.datax.plugin.writer.mongodb34writer.MongoDB34Writer",
+    "description": "useScene: prod. mechanism: via mongoclient connect mongodb write 3.4.3 data concurrent.",
+    "developer": "lusong"
+}

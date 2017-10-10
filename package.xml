@@ -245,6 +245,13 @@
             </includes>
             <outputDirectory>datax</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>mongodb34writer/target/datax/</directory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+            <outputDirectory>datax</outputDirectory>
+        </fileSet>        
 		<fileSet>
             <directory>oraclewriter/target/datax/</directory>
             <includes>
