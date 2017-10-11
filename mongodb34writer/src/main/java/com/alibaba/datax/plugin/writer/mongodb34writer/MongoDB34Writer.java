@@ -169,9 +169,10 @@ public class MongoDB34Writer extends Writer {
 				BasicDBObject data = new BasicDBObject();
 
 				for (int i = 0; i < record.getColumnNumber(); i++) {
-					String type = columnMeta.getJSONObject(i).getString(KeyConstant.COLUMN_TYPE);
-					String columnName = columnMeta.getJSONObject(i).getString(KeyConstant.COLUMN_NAME);
-					String columnAsString = record.getColumn(i).asString();
+					final String type = columnMeta.getJSONObject(i).getString(KeyConstant.COLUMN_TYPE);
+					final String columnName = columnMeta.getJSONObject(i).getString(KeyConstant.COLUMN_NAME);
+					final Column recordColumn = record.getColumn(i);
+					final String columnAsString = recordColumn.asString();
 
 					// 空记录处理
 					if (Strings.isNullOrEmpty(columnAsString)) {
@@ -186,11 +187,11 @@ public class MongoDB34Writer extends Writer {
 					if (Column.Type.INT.name().equalsIgnoreCase(type)) {
 						// int是特殊类型, 其他类型按照保存时Column的类型进行处理
 						try {
-							data.put(columnName, Integer.parseInt(String.valueOf(record.getColumn(i).getRawData())));
+							data.put(columnName, Integer.parseInt(String.valueOf(recordColumn.getRawData())));
 						} catch (Exception e) {
 							super.getTaskPluginCollector().collectDirtyRecord(record, e);
 						}
-					} else if (record.getColumn(i) instanceof StringColumn) {
+					} else if (recordColumn instanceof StringColumn) {
 						// 处理ObjectId和数组类型
 						try {
 							if (KeyConstant.isObjectIdType(type.toLowerCase())) {
@@ -261,46 +262,46 @@ public class MongoDB34Writer extends Writer {
 						} catch (Exception e) {
 							super.getTaskPluginCollector().collectDirtyRecord(record, e);
 						}
-					} else if (record.getColumn(i) instanceof LongColumn) {
+					} else if (recordColumn instanceof LongColumn) {
 
 						if (Column.Type.LONG.name().equalsIgnoreCase(type)) {
-							data.put(columnName, record.getColumn(i).asLong());
+							data.put(columnName, recordColumn.asLong());
 						} else {
 							super.getTaskPluginCollector().collectDirtyRecord(record,
 									"record's [" + i + "] column's type should be: " + type);
 						}
 
-					} else if (record.getColumn(i) instanceof DateColumn) {
+					} else if (recordColumn instanceof DateColumn) {
 
 						if (Column.Type.DATE.name().equalsIgnoreCase(type)) {
-							data.put(columnName, record.getColumn(i).asDate());
+							data.put(columnName, recordColumn.asDate());
 						} else {
 							super.getTaskPluginCollector().collectDirtyRecord(record,
 									"record's [" + i + "] column's type should be: " + type);
 						}
 
-					} else if (record.getColumn(i) instanceof DoubleColumn) {
+					} else if (recordColumn instanceof DoubleColumn) {
 
 						if (Column.Type.DOUBLE.name().equalsIgnoreCase(type)) {
-							data.put(columnName, record.getColumn(i).asDouble());
+							data.put(columnName, recordColumn.asDouble());
 						} else {
 							super.getTaskPluginCollector().collectDirtyRecord(record,
 									"record's [" + i + "] column's type should be: " + type);
 						}
 
-					} else if (record.getColumn(i) instanceof BoolColumn) {
+					} else if (recordColumn instanceof BoolColumn) {
 
 						if (Column.Type.BOOL.name().equalsIgnoreCase(type)) {
-							data.put(columnName, record.getColumn(i).asBoolean());
+							data.put(columnName, recordColumn.asBoolean());
 						} else {
 							super.getTaskPluginCollector().collectDirtyRecord(record,
 									"record's [" + i + "] column's type should be: " + type);
 						}
 
-					} else if (record.getColumn(i) instanceof BytesColumn) {
+					} else if (recordColumn instanceof BytesColumn) {
 
 						if (Column.Type.BYTES.name().equalsIgnoreCase(type)) {
-							data.put(columnName, record.getColumn(i).asBytes());
+							data.put(columnName, recordColumn.asBytes());
 						} else {
 							super.getTaskPluginCollector().collectDirtyRecord(record,
 									"record's [" + i + "] column's type should be: " + type);
