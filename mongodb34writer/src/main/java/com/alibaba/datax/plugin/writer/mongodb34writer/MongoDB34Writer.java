@@ -1,8 +1,12 @@
 package com.alibaba.datax.plugin.writer.mongodb34writer;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import org.bson.types.Decimal128;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -240,6 +244,15 @@ public class MongoDB34Writer extends Writer {
 								}
 							} else if (type.toLowerCase().equalsIgnoreCase("json")) {
 								JSONObject jsonOO = JSON.parseObject(columnAsString);
+
+								final Set<Entry<String, Object>> entrySet = jsonOO.entrySet();
+								for (Entry<String, Object> entry : entrySet) {
+									if (entry.getValue() instanceof BigDecimal) {
+										final BigDecimal big = (BigDecimal) entry.getValue();
+										jsonOO.put(entry.getKey(), new Decimal128(big));
+									}
+								}
+
 								// 如果是json类型,将其进行转换,变成内嵌mongo对象
 								data.put(columnName, jsonOO);
 							} else {
