@@ -239,8 +239,9 @@ public class MongoDB34Writer extends Writer {
 									data.put(columnName, columnAsString.split(splitter));
 								}
 							} else if (type.toLowerCase().equalsIgnoreCase("json")) {
-								// 如果是json类型,将其进行转换
-								data.put(columnName, JSON.toJSON(columnAsString));
+								JSONObject jsonOO = JSON.parseObject(columnAsString);
+								// 如果是json类型,将其进行转换,变成内嵌mongo对象
+								data.put(columnName, jsonOO);
 							} else {
 								data.put(columnName, columnAsString);
 							}
